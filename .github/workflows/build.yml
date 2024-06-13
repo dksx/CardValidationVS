@@ -1,0 +1,60 @@
+name: Build
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '.scripts/**'
+      - .gitignore
+      - LICENSE
+      - README.md
+
+  workflow_dispatch:
+    inputs:
+      build-container:
+        type: boolean
+        required: true
+        default: false
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      name: Checkout code
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v4
+
+    - name: Restore solution
+      run: dotnet restore
+
+    - name: Build solution
+      run: dotnet build --no-restore --configuration Release -p:arch=linux-x64
+      
+    - name: Test solution
+      run: dotnet test --no-build --configuration Release
+
+    - name: Generate version number v1
+      run: echo "build_version=$GITHUB_RUN_NUMBER-$(git rev-parse --short origin/main)" >> "$GITHUB_ENV"
+
+    - name: Build container
+      if: ${{ inputs.build-container == true }}
+      run: docker build . --file Dockerfile --tag ghcr.io/${{ secrets.GH_USERNAME }}/validatecard:$build_version --tag ghcr.io/${{ secrets.GH_USERNAME }}/validatecard:latest
+      working-directory: ./src/CardValidation.Api/
+
+    - name: Login to GitHub Container Registry
+      if: ${{ inputs.build-container == true }}
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ secrets.GH_USERNAME }}
+        password: ${{ secrets.GH_TOKEN }}
+
+    - name: Push container to ghr
+      if: ${{ inputs.build-container == true }}
+      run: |
+       docker push ghcr.io/${{ secrets.GH_USERNAME }}/validatecard:$build_version
+       docker push ghcr.io/${{ secrets.GH_USERNAME }}/validatecard:latest
