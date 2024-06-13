@@ -5,6 +5,8 @@ using CardValidation.Api.Entities;
 using Microsoft.AspNetCore.Mvc;
 using CardValidation.Api.Contracts.ValidateCard;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Http;
+using System.Reflection.Metadata.Ecma335;
 
 namespace CardValidation.Api.Features.Articles;
 public static class ValidateCard
@@ -36,7 +38,7 @@ public static class ValidateCard
                 Number = validateCardRequest.CardNumber,
                 FullName = validateCardRequest.FullName,
                 Cvc = validateCardRequest.Cvc,
-                ExpirationDate = validateCardRequest.ExpirationDate,
+                ExpirationDate = DateTime.Parse(validateCardRequest.ExpirationDate),
                 CardType = DetectCardType(startDigit).ToString(),
             };
         }
@@ -71,7 +73,17 @@ public class CardValidator : AbstractValidator<ValidateCardRequest>
           .WithMessage("A valid CVC number is required.");
         RuleFor(cr => cr.ExpirationDate)
           .NotEmpty()
-          .Must(expirationDate => expirationDate > DateTime.UtcNow)
+          .Must(expirationDate => BeAValidDate(expirationDate))
           .WithMessage("A valid expiration date is required.");
+    }
+
+    private static bool BeAValidDate(string date)
+    {
+        if (!DateTime.TryParse(date, out DateTime expirationDate))
+        {
+            return false;
+        }
+
+        return expirationDate > DateTime.UtcNow;
     }
 }

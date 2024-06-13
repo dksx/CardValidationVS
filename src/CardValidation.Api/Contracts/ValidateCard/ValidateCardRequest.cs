@@ -10,5 +10,5 @@ public readonly record struct ValidateCardRequest
 
     public uint Cvc { get; init; }
 
-    public DateTime ExpirationDate { get; init; }
+    public string ExpirationDate { get; init; } = new DateTime(1970, 1, 1).ToString("o");
 }
