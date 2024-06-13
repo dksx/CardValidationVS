@@ -37,7 +37,7 @@ WebApplication app = builder.Build();
 
 app.MapEndpoints();
 
-if (app.Environment.IsDevelopment())
+if (app.Configuration.GetValue("EnableSwagger", false))
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
