@@ -18,7 +18,7 @@ on:
 
 jobs:
   build:
-
+    name: Build codebase and execute tests
     runs-on: ubuntu-latest
 
     steps:
@@ -29,13 +29,13 @@ jobs:
       uses: actions/setup-dotnet@v4
 
     - name: Restore solution
-      run: dotnet restore
+      run: dotnet restore --runtime linux-x64
 
     - name: Build solution
       run: dotnet build --no-restore --configuration Release -p:arch=linux-x64
       
     - name: Test solution
-      run: dotnet test --no-build --configuration Release
+      run: dotnet test --no-build --configuration Release --runtime linux-x64
 
     - name: Generate version number v1
       run: echo "build_version=$GITHUB_RUN_NUMBER-$(git rev-parse --short origin/main)" >> "$GITHUB_ENV"
