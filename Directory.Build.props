@@ -1,7 +1,10 @@
 ﻿<!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
 <Project>
-  <PropertyGroup Condition="'$(arch)' == 'x64'">
+  <PropertyGroup Condition="'$(arch)' == 'linux-x64'">
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(arch)' == 'win-x64'">
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
