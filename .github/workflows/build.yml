@@ -18,7 +18,7 @@ on:
 
 jobs:
   build:
-
+    name: Build codebase and execute tests
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +29,7 @@ jobs:
       uses: actions/setup-dotnet@v4
 
     - name: Restore solution
-      run: dotnet restore
+      run: dotnet restore --runtime linux-x64
 
     - name: Build solution
       run: dotnet build --no-restore --configuration Release -p:arch=linux-x64
