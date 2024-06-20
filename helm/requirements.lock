@@ -1,0 +1,9 @@
+dependencies:
+- name: hull
+  repository: https://vidispine.github.io/hull
+  version: 1.28.6
+- name: hull-vidispine-addon
+  repository: https://vidispine.github.io/hull-vidispine-addon
+  version: 1.28.6
+digest: sha256:2c22164a36e9d1ad9d0f75e73437b45c297df69f2ab90dedfd562a80e0513bad
+generated: "2024-06-18T19:49:58.4063428+02:00"

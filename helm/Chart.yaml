@@ -1,0 +1,13 @@
+# Basic chart description and version
+apiVersion: v1
+appVersion: "24.2"
+description: Card validation
+name: cardvalidation # replace with Chart Name, must be identical to the charts folder name
+version: "24.2"
+dependencies:
+  - name: hull
+    version: "1.28.6"
+    repository: "https://vidispine.github.io/hull"
+  - name: hull-vidispine-addon
+    version: "1.28.6"
+    repository: "https://vidispine.github.io/hull-vidispine-addon"

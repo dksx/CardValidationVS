@@ -11,6 +11,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHealthChecks()
+    .AddCheck<BasicHealthCheck>(name: "BasicHealthCheck", failureStatus: Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy, timeout: TimeSpan.FromSeconds(10));
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
@@ -53,8 +55,8 @@ if (app.Configuration.GetValue("EnableSwagger", false))
 }
 
 //app.UseHttpsRedirection();
-
-app.UseExceptionHandler(options => {});
+app.MapHealthChecks("/_health");
+app.UseExceptionHandler(options => { });
 
 app.Run();
 
