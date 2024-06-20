@@ -6,7 +6,7 @@ using CardValidation.Api.Entities;
 using MediatR;
 using Xunit;
 
-using static CardValidation.Api.Features.Articles.ValidateCard;
+using static CardValidation.Api.Features.ValidateCard.ValidateCardLogic;
 
 namespace CardValidation.Tests.Application.UnitTests;
 public class ValidateCardMediaTRPipelineTests

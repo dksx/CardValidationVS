@@ -1,15 +1,11 @@
-﻿using System;
-using MediatR;
-using FluentValidation;
-using CardValidation.Api.Entities;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using CardValidation.Api.Contracts.ValidateCard;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Http;
-using System.Reflection.Metadata.Ecma335;
+using CardValidation.Api.Entities;
+using MediatR;
 
-namespace CardValidation.Api.Features.Articles;
-public static class ValidateCard
+namespace CardValidation.Api.Features.ValidateCard;
+public static class ValidateCardLogic
 {
     public class ValidateCardQuery(ValidateCardRequest validateCardRequest) : IRequest<Results<Ok<Card>, BadRequest<ValidationProblemDetails>>>
     {
@@ -20,7 +16,7 @@ public static class ValidateCard
     {
         public async Task<Results<Ok<Card>, BadRequest<ValidationProblemDetails>>> Handle(ValidateCardQuery query, CancellationToken cancellationToken)
         {
-            CardValidator validator = new CardValidator();
+            CardModelValidator validator = new CardModelValidator();
             var validationResult = await validator.ValidateAsync(query.ValidateCardRequest, cancellationToken).ConfigureAwait(false);
 
             //if (!validationResult.IsValid) throw new CardValidation.Api.Shared.ValidationException(validationResult.Errors);
@@ -53,49 +49,5 @@ public static class ValidateCard
                 _ => CardType.Unknown
             };
         }
-    }
-}
-
-public class CardValidator : AbstractValidator<ValidateCardRequest>
-{
-    public CardValidator()
-    {
-        RuleFor(cr => cr.FullName)
-          .NotEmpty()
-          .WithMessage("A valid fullname for the card owner is required.");
-
-        RuleFor(cr => cr.CardNumber)
-          .NotEmpty()
-          .CreditCard()
-          .WithMessage("A valid credit card number is required.");
-
-        RuleFor(cr => cr.Cvc)
-          .Must(cvc => cvc >= 100 && cvc <= 9999)
-          .WithMessage("A valid CVC is required.");
-
-        RuleFor(cr => cr.Cvc)
-          .Must(cvc => cvc >= 100 && cvc <= 999)
-          .When(x => x.CardNumber is not null && ( x.CardNumber.StartsWith('4') || x.CardNumber.StartsWith('5')))
-          .WithMessage("A valid 3 digit CVC for this type of card is required.");
-
-        RuleFor(cr => cr.Cvc)
-          .Must(cvc => cvc >= 1000 && cvc <= 9099)
-          .When(x => x.CardNumber is not null && (x.CardNumber.StartsWith('3')))
-          .WithMessage("A valid 4 digit CVC for this type of card is required.");
-
-        RuleFor(cr => cr.ExpirationDate)
-          .NotEmpty()
-          .Must(expirationDate => BeAValidDate(expirationDate))
-          .WithMessage("A valid expiration date is required.");
-    }
-
-    private static bool BeAValidDate(string date)
-    {
-        if (!DateTime.TryParse(date, out DateTime expirationDate))
-        {
-            return false;
-        }
-
-        return expirationDate > DateTime.UtcNow;
     }
 }
