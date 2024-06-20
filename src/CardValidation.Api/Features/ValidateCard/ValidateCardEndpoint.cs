@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Asp.Versioning.Builder;
 using CardValidation.Api.Contracts.ValidateCard;
+using CardValidation.Api.Entities;
 using CardValidation.Api.Extensions;
 using CardValidation.Api.Shared;
 using MediatR;
 
-using static CardValidation.Api.Features.Articles.ValidateCard;
-using CardValidation.Api.Entities;
-using Microsoft.AspNetCore.Http.HttpResults;
+using static CardValidation.Api.Features.ValidateCard.ValidateCardLogic;
 
 namespace CardValidation.Api.Features.ValidateCard;
 
-public class ValidateCardEndpoint : EndpointGroupBase
+public class ValidateCard : EndpointGroupBase
 {
     public override void Map(WebApplication app, ApiVersionSet versionSet)
     {
