@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace CardValidation.Api.Shared;
+namespace CardValidation.Api.Infrastructure;
 
 internal sealed class BasicHealthCheck : IHealthCheck
 {

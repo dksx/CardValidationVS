@@ -2,7 +2,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CardValidation.Api.Shared;
+namespace CardValidation.Api.Infrastructure;
 
 public class CustomExceptionHandler : IExceptionHandler
 {
@@ -39,6 +39,7 @@ public class CustomExceptionHandler : IExceptionHandler
 
     private static async Task<bool> HandleUnknownException(HttpContext httpContext, Exception ex)
     {
+
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
         await httpContext.Response.WriteAsJsonAsync(new ProblemDetails()
         {

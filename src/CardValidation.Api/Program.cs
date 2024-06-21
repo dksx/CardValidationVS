@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using Asp.Versioning;
 using CardValidation.Api;
 using CardValidation.Api.Extensions;
-using CardValidation.Api.Shared;
+using CardValidation.Api.Infrastructure;
 using FluentValidation;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
