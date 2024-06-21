@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 using CardValidation.Api.Entities;
@@ -10,7 +11,7 @@ public class ValidateCardEndpointV1Tests(CustomWebApplicationFactory<Program> fa
     private readonly HttpClient _httpClient = factory.CreateClient();
 
     [Fact]
-    public async Task ValidateCardV1BadRequest()
+    public async Task ValidateCardV1InvalidInput_ReturnsValidationErrors()
     {
         var response = await _httpClient.PostAsJsonAsync(TestConstants.ValidateCardEndpointV1, TestConstants.BadRequest).ConfigureAwait(false);
 
@@ -26,9 +27,27 @@ public class ValidateCardEndpointV1Tests(CustomWebApplicationFactory<Program> fa
                 && problemResult.Errors.ContainsKey(TestConstants.ErroneousExpirationDate));
     }
 
+    [Fact]
+    public async Task ValidateCardV1BadInput_ReturnsBadRequest()
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, TestConstants.ValidateCardEndpointV1)
+        {
+            Content = new StringContent(TestConstants.BadRequestPayload, Encoding.UTF8, "application/json")
+        };
+
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        ProblemDetails? problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+        Assert.NotNull(problemDetails);
+        Assert.NotNull(problemDetails.Detail);
+        Assert.Equal(TestConstants.BadRequestPayloadDetails, problemDetails.Detail);
+    }
 
     [Fact]
-    public async Task ValidateCardV1OK()
+    public async Task ValidateCardV1ValidInput_ReturnsOK()
     {
         var response = await _httpClient.PostAsJsonAsync(TestConstants.ValidateCardEndpointV1, TestConstants.GoodRequest).ConfigureAwait(false);
 
@@ -44,7 +63,7 @@ public class ValidateCardEndpointV1Tests(CustomWebApplicationFactory<Program> fa
     }
 
     [Fact]
-    public async Task ValidateCardV2OK()
+    public async Task ValidateCardV2ValidInput_ReturnsOK()
     {
         var response = await _httpClient.GetAsync(TestConstants.ValidateCardEndpointV2).ConfigureAwait(false);
 
