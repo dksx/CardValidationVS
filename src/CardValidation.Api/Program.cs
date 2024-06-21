@@ -17,6 +17,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+builder.Services.Configure<RouteHandlerOptions>(options => options.ThrowOnBadRequest = true);
+
 Assembly assembly = Assembly.GetExecutingAssembly();
 
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
