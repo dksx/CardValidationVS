@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using Asp.Versioning.Builder;
 using Asp.Versioning.Conventions;
-using CardValidation.Api.Shared;
+using CardValidation.Api.Infrastructure;
 
 namespace CardValidation.Api.Extensions;
 

@@ -4,7 +4,7 @@ using Asp.Versioning.Builder;
 using CardValidation.Api.Contracts.ValidateCard;
 using CardValidation.Api.Entities;
 using CardValidation.Api.Extensions;
-using CardValidation.Api.Shared;
+using CardValidation.Api.Infrastructure;
 using MediatR;
 
 using static CardValidation.Api.Features.ValidateCard.ValidateCardLogic;

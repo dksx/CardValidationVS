@@ -5,7 +5,7 @@ using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace CardValidation.Api;
+namespace CardValidation.Api.Infrastructure;
 
 /// <summary>
 /// Initializes a new instance of the <see cref="ConfigureSwaggerOptions"/> class.

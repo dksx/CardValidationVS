@@ -1,6 +1,6 @@
 using Asp.Versioning.Builder;
 
-namespace CardValidation.Api.Shared;
+namespace CardValidation.Api.Infrastructure;
 
 public abstract class EndpointGroupBase
 {
