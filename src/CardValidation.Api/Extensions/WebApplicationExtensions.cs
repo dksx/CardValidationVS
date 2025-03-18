@@ -24,16 +24,12 @@ public static class WebApplicationExtensions
     {
         Type endpointGroupType = typeof(EndpointGroupBase);
 
-        ApiVersionSet versionSet = app.NewApiVersionSet()
-            .HasApiVersion(Constants.ApiVersionV1)
-            .HasApiVersion(Constants.ApiVersionV2)
-            .ReportApiVersions()
-            .Build();
-
         Assembly assembly = Assembly.GetExecutingAssembly();
 
         var endpointGroupTypes = assembly.GetExportedTypes()
             .Where(t => t.IsSubclassOf(endpointGroupType));
+
+        ApiVersionSet versionSet = HandleApiVersioning(app);
 
         foreach (var type in endpointGroupTypes)
         {
@@ -44,5 +40,16 @@ public static class WebApplicationExtensions
         }
 
         return app;
+    }
+
+    private static ApiVersionSet HandleApiVersioning(WebApplication app)
+    {
+        ApiVersionSetBuilder verionBuilder = app.NewApiVersionSet();
+        foreach (uint supportedVersion in Constants.SUPPORTED_API_VERIONS)
+        {
+            verionBuilder.HasApiVersion(supportedVersion);
+        }
+
+        return verionBuilder.ReportApiVersions().Build();
     }
 }
