@@ -19,7 +19,7 @@ public static class ValidateCardLogic
             CardModelValidator validator = new CardModelValidator();
             var validationResult = await validator.ValidateAsync(query.ValidateCardRequest, cancellationToken).ConfigureAwait(false);
 
-            //if (!validationResult.IsValid) throw new CardValidation.Api.Shared.ValidationException(validationResult.Errors);
+            //if (!validationResult.IsValid) throw new CardValidation.Api.Infrastructure.ValidationException(validationResult.Errors);
 
             return !validationResult.IsValid
                 ? TypedResults.BadRequest(new ValidationProblemDetails(validationResult.ToDictionary()))

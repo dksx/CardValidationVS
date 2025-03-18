@@ -13,7 +13,7 @@ public class ValidateCardEndpointV1Tests(CustomWebApplicationFactory<Program> fa
     [Fact]
     public async Task ValidateCardV1InvalidInput_ReturnsValidationErrors()
     {
-        var response = await _httpClient.PostAsJsonAsync(TestConstants.ValidateCardEndpointV1, TestConstants.BadRequest).ConfigureAwait(false);
+        var response = await _httpClient.PostAsJsonAsync(TestConstants.ValidateCardEndpointV1, TestConstants.BadRequest);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -35,7 +35,7 @@ public class ValidateCardEndpointV1Tests(CustomWebApplicationFactory<Program> fa
             Content = new StringContent(TestConstants.BadRequestPayload, Encoding.UTF8, "application/json")
         };
 
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        var response = await _httpClient.SendAsync(request);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -49,7 +49,7 @@ public class ValidateCardEndpointV1Tests(CustomWebApplicationFactory<Program> fa
     [Fact]
     public async Task ValidateCardV1ValidInput_ReturnsOK()
     {
-        var response = await _httpClient.PostAsJsonAsync(TestConstants.ValidateCardEndpointV1, TestConstants.GoodRequest).ConfigureAwait(false);
+        var response = await _httpClient.PostAsJsonAsync(TestConstants.ValidateCardEndpointV1, TestConstants.GoodRequest);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -65,11 +65,11 @@ public class ValidateCardEndpointV1Tests(CustomWebApplicationFactory<Program> fa
     [Fact]
     public async Task ValidateCardV2ValidInput_ReturnsOK()
     {
-        var response = await _httpClient.GetAsync(TestConstants.ValidateCardEndpointV2).ConfigureAwait(false);
+        var response = await _httpClient.GetAsync(TestConstants.ValidateCardEndpointV2);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        string? content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        string? content = await response.Content.ReadAsStringAsync();
 
         Assert.NotNull(content);
         Assert.Equal("\"Hello V2\"", content);

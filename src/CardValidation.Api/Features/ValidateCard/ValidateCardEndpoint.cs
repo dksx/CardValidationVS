@@ -27,7 +27,7 @@ public class ValidateCard : EndpointGroupBase
     public async Task<Results<Ok<Card>, BadRequest<ValidationProblemDetails>>> ValidateCardDetails([FromBody] ValidateCardRequest request, [FromServices] IMediator mediator)
     {
         ValidateCardQuery query = new ValidateCardQuery(request);
-        return await mediator.Send(query);
+        return await mediator.Send(query).ConfigureAwait(false);
     }
 
     public IResult ValidateCardDetailsV2()
